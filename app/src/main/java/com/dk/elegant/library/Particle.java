@@ -10,17 +10,19 @@ public class Particle {
     float x;
     float y;
     float radius;
+    float alpha;
 
     float start_x;
     float start_y;
     float end_x;
     float end_y;
+    float start_radius;
+    float end_radius;
 
     int totalSteps;
     int currentStep;
     boolean isDead = false;
     Paint paint;
-
 
     public void drawSelf(Canvas canvas) {
         canvas.drawCircle(x, y, radius, paint);
@@ -30,5 +32,6 @@ public class Particle {
         currentStep++;
         x = start_x + (end_x - start_x) * currentStep / totalSteps;
         y = start_y + (end_y - start_y) * currentStep / totalSteps;
+        radius = start_radius + (end_radius - start_radius) * currentStep / totalSteps;
     }
 }
