@@ -2,6 +2,7 @@ package com.dk.elegant.library;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.view.SurfaceHolder;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,24 +16,21 @@ public class World {
     Bitmap foreground;
 
     Creator creator;
+    SurfaceHolder holder;
     Canvas canvas;
     List<Particle> particles = new LinkedList<Particle>();
 
-    public void setCanvas(Canvas canvas) {
-        this.canvas = canvas;
+    public void setHolder(SurfaceHolder holder) {
+        this.holder = holder;
     }
 
     public void init() {
-
-    }
-
-    private void next() {
-        for (Particle p : particles) {
-            p.next();
-        }
+        creator = new Creator();
+        particles.addAll( creator.getParticle(100));
     }
 
     private void drawWorld() {
+        canvas = holder.lockCanvas();
         List<Particle> deadObjects = new ArrayList<>();
         for (Particle p : particles) {
             if (p.isDead) {
@@ -42,11 +40,21 @@ public class World {
             p.next();
             p.drawSelf(canvas);
         }
+        holder.unlockCanvasAndPost(canvas);
         if (deadObjects.size() > 0) {
             particles.removeAll(deadObjects);
             particles.addAll(creator.getParticle(deadObjects.size()));
         }
     }
 
+    private void drawDeadRects(List<Particle> deadObjects){
+        //TODO
+    }
+
+    public void start() {
+        while (true) {
+            drawWorld();
+        }
+    }
 
 }
